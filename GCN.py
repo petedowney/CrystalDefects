@@ -25,9 +25,9 @@ class GraphConv(torch.nn.Module):
 
         self.GCN1 = GATConv(input_size, input_size)
         self.GCN2 = GATConv(input_size, input_size)
-        self.GCN3 = GCNConv(input_size, input_size)
-        self.GCN4 = GCNConv(input_size, input_size)
-        self.GCN5 = GCNConv(input_size, input_size)
+        # self.GCN3 = GCNConv(input_size, input_size)
+        # self.GCN4 = GCNConv(input_size, input_size)
+        # self.GCN5 = GCNConv(input_size, input_size)
 
         # After pooling, the input size is 500 (output of last GCN layer)
         self.linear = torch.nn.Linear(input_size * GRAPH_SIZE, input_size * int(GRAPH_SIZE/2))
@@ -38,7 +38,7 @@ class GraphConv(torch.nn.Module):
 
         self.loss = nn.MSELoss()
         self.optimizer = torch.optim.SGD(self.parameters(), lr=lr, weight_decay=0)
-
+        #self.optimizer = torch.optim.Adam(self.parameters(), lr=lr, weight_decay=0)
         # gate_nn = nn.Sequential(
         #     nn.Linear(input_size, 1),
         #     nn.Sigmoid()  # attention scores in [0,1]
