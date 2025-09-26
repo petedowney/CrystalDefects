@@ -16,9 +16,11 @@ from tqdm import tqdm
 
 GRAPH_SIZE = 15
 
-class GraphConv(torch.nn.Module):
-    def __init__(self, input_size, lr):
-        super(GraphConv, self).__init__()
+class GraphConvClassifier(torch.nn.Module):
+    def __init__(self, input_size, output_size, lr):
+        super(GraphConvClassifier, self).__init__()
+
+        # self.embedding = nn.Embedding(ATOM_AMOUNT, input_size)
 
         self.GCN1 = GATConv(input_size, input_size)
         self.GCN2 = GATConv(input_size, input_size)
@@ -26,12 +28,10 @@ class GraphConv(torch.nn.Module):
         # After pooling, the input size is 500 (output of last GCN layer)
         self.linear = torch.nn.Linear(input_size * GRAPH_SIZE, input_size * int(GRAPH_SIZE/2))
         self.linear2 = torch.nn.Linear(input_size * int(GRAPH_SIZE/2), input_size)
-        self.linear3 = torch.nn.Linear(input_size, 1)
+        self.linear3 = torch.nn.Linear(input_size, output_size)
 
-        self.test = torch.nn.Linear(1, 1)
-
-        self.loss = nn.MSELoss()
-        self.optimizer = torch.optim.SGD(self.parameters(), lr=lr, weight_decay=0)
+        self.loss = nn.CrossEntropyLoss()
+        self.optimizer = torch.optim.Adam(self.parameters(), lr=lr, weight_decay=0)
 
         self.lossHistory = []
         self.valLossHistory = []
@@ -56,9 +56,12 @@ class GraphConv(torch.nn.Module):
         x = torch.stack(graph_vecs, dim=0)
         x = self.linear(x)
         x = F.relu(x)
+        #x = nn.Dropout(p=0.4)(x)
         x = self.linear2(x)
         x = F.relu(x)
+        #x = nn.Dropout(p=0.4)(x)
         x = self.linear3(x)
+        x = F.softmax(x, dim=1)
  
         return x
 
@@ -76,7 +79,7 @@ class GraphConv(torch.nn.Module):
                     outputFeature = data.y
                     batch = data.batch if hasattr(data, 'batch') else None
                     output = self.forward(inputFeatures, edge_index, edge_weight, batch)
-                    loss = self.loss(output.squeeze(), outputFeature)
+                    loss = self.loss(output, outputFeature)
                     self.optimizer.zero_grad()
                     loss.backward()
                     self.optimizer.step()
@@ -94,7 +97,7 @@ class GraphConv(torch.nn.Module):
                     outputFeature = data.y
                     batch = data.batch if hasattr(data, 'batch') else None
                     output = self.forward(inputFeatures, edge_index, edge_weight, batch)
-                    loss = self.loss(output.squeeze(), outputFeature)
+                    loss = self.loss(output, outputFeature)
                     val_loss += loss.item()
             val_loss /= len(data_val)
             self.valLossHistory.append(val_loss)
@@ -102,7 +105,8 @@ class GraphConv(torch.nn.Module):
                 print(f'Epoch {epoch+1} Loss --> {epoch_loss:.4f} | Val Loss --> {val_loss:.4f}')
 
 
-class InterpreterDataset(Dataset):
+
+class InterpreterDatasetClassifier(Dataset):
     def __init__(self, inputFeaturesList, adjacencyMatrixList, outputFeatureList, transform=None):
         assert len(inputFeaturesList) == len(outputFeatureList), "Input and output feature lists must be of the same length"
         assert len(inputFeaturesList) == len(adjacencyMatrixList), "Input feature and adjacency matrix lists must be of the same length"
@@ -119,5 +123,10 @@ class InterpreterDataset(Dataset):
     def __getitem__(self, idx):
         # Convert dense adjacency matrix to edge index and edge_weight (distance)
         edge_index, edge_weight = dense_to_sparse(self.adjacencyMatrixList[idx, :GRAPH_SIZE, :GRAPH_SIZE])
+        # Optionally limit to 1000 edges
+        #                     self.optimizer.zero_grad()
+
+
         data = Data(x=self.inputFeaturesList[idx, :GRAPH_SIZE], edge_index=edge_index, edge_weight=edge_weight.t().contiguous(), y=self.outputFeatureList[idx])
+        #print(self.inputFeaturesList[idx, :, 0], self.inputFeaturesList[idx, 0, -1],  self.outputFeatureList[idx])
         return data
