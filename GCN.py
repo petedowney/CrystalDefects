@@ -17,7 +17,7 @@ from tqdm import tqdm
 GRAPH_SIZE = 15
 
 class GraphConv(torch.nn.Module):
-    def __init__(self, input_size, lr):
+    def __init__(self, input_size, learning):
         super(GraphConv, self).__init__()
 
         self.GCN1 = GATConv(input_size, input_size)
@@ -31,7 +31,7 @@ class GraphConv(torch.nn.Module):
         self.test = torch.nn.Linear(1, 1)
 
         self.loss = nn.MSELoss()
-        self.optimizer = torch.optim.SGD(self.parameters(), lr=lr, weight_decay=0)
+        self.optimizer = torch.optim.SGD(self.parameters(), lr=learning, weight_decay=0)
 
         self.lossHistory = []
         self.valLossHistory = []

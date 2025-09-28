@@ -1,0 +1,15 @@
+
+
+    z predict which "defect_charge_state" (integer) has "defect_is_intrinsically_stable" = true (boolean). 
+    This is which charge state the defect prefers in the material.
+
+    for the defects with "defect_is_intrinsically_stable" = true, we would like to 
+    predict "defect_stable_chem_range" (float). 
+    This is the width of the "plateau" of doping (Fermi level) energies for which the defect 
+    stays in the preferred charge state - if this width is small, the defect will easily switch charge states, 
+    which makes it difficult to use for QIS.
+
+    x "defect_spin_state" (integer). This is the spin state of the defect - in order to be useable for QIS, the defect needs to have a non-zero spin state, and ideally it would be 2 (like NV center) or 3 (like vacancy in SiC). For a defect with a non-zero spin state, quantum information can be encoded into the spin state. 
+    x "defect_hse_excited_deltaQ" (float). This is the sum of the mass-weighted displacements between the ground and excited states. If this quantity is large, it means that the defect couples strongly to lattice vibrations, and will easily lose quantum information encoded into it's spin state.
+    x "defect_zero_phonon_line" (float, in eV). This is the energy of the defect's primary emission. An ideal defect for QIS will emit at 1550nm (0.8 eV), or at least in the telecom band, 1260nm-1625nm (0.984eV-0.763eV).
+    x "defect_lvl_tdm" (float, in Debye^2). This is the transition dipole moment for the defect, which is effectively how bright it is - an ideal defect for QIS will have a value of at least 1 Debye^2, and better if it is >10 Debye^2.

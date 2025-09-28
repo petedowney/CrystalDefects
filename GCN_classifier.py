@@ -61,7 +61,7 @@ class GraphConvClassifier(torch.nn.Module):
         x = F.relu(x)
         #x = nn.Dropout(p=0.4)(x)
         x = self.linear3(x)
-        x = F.softmax(x, dim=1)
+        #x = F.softmax(x, dim=1)
  
         return x
 
