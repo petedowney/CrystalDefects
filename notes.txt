@@ -13,3 +13,25 @@
     x "defect_hse_excited_deltaQ" (float). This is the sum of the mass-weighted displacements between the ground and excited states. If this quantity is large, it means that the defect couples strongly to lattice vibrations, and will easily lose quantum information encoded into it's spin state.
     x "defect_zero_phonon_line" (float, in eV). This is the energy of the defect's primary emission. An ideal defect for QIS will emit at 1550nm (0.8 eV), or at least in the telecom band, 1260nm-1625nm (0.984eV-0.763eV).
     x "defect_lvl_tdm" (float, in Debye^2). This is the transition dipole moment for the defect, which is effectively how bright it is - an ideal defect for QIS will have a value of at least 1 Debye^2, and better if it is >10 Debye^2.
+
+
+up to 105 single defects
+
+after single element + commonly found in silicon (vacs C, H, O, Si)
+106-2704
+
+2704+ complicated nnk defect structs 
+
+2705-7754 Every pair wise combo. 4 possible structs. double int. double subsitutional. two different intersticial subsitutional best off looking for elemental combinations
+best bet?
+
+25 - hours 4 A100 per defect
+
+
+priority 1: postcar + charge outputs predicted properties
+priority 2: spin state classifier
+priority 3: GNN architecure
+priority 4: Properties + power graph 
+priority 5: 3d thingy
+
+https://github.com/HarisIqbal88/PlotNeuralNet
