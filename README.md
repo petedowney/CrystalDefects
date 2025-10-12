@@ -8,6 +8,18 @@ This project uses GCNs to predict various properties of crystal defects that are
 
 The goal is to be able to predict these properties without the many compute hours that a traditional HSE simulation takes
 
+## Use
+
+The folder `prediction` contains a standalone set of files that can be used to predict the crystal properties of any POSCAR file. For use do as follows:
+
+```bash
+cd ./prediction
+python main.py {POSCAR path} {Charge} --output {output path}
+```
+This will generate a set of prediction properties at the designated output path. If none is given it will default to `output.txt`
+
+
+
 ## Key Features
 
 - **Graph-based defect representation**: Crystal defects are modeled as graphs with atoms as nodes and bonds as edges
@@ -102,5 +114,4 @@ Training generates:
 - Loss curves (training vs validation)
 - Model checkpoints
 - Normalization parameters (for regression)
-```
 

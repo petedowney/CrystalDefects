@@ -1,0 +1,10 @@
+defect_hse_excited_deltaQ: 0.004616103135049343
+defect_zero_phonon_line: 0.6080062389373779
+defect_lvl_tdm: 4.760649681091309
+defect_total_energy: -1419.635009765625
+defect_fermi_energy: 5.7614641189575195
+defect_cbm-vbm_energy: 0.13979531824588776
+defect_initial_pbe_deltaQ: 0.03869998827576637
+defect_initial_pbe_deltaR: 0.002875641454011202
+defect_electron_affinity: 6.17279577255249
+defect_ionization_energy: 6.2079548835754395
