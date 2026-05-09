@@ -15,18 +15,17 @@ from tqdm import tqdm
 # using PyTorch
 
 GRAPH_SIZE = 15
+ATT_HEADS = 6
 
 class GraphConvClassifier(torch.nn.Module):
     def __init__(self, input_size, output_size, lr):
         super(GraphConvClassifier, self).__init__()
 
-        # self.embedding = nn.Embedding(ATOM_AMOUNT, input_size)
+        self.GCN1 = GATConv(input_size, input_size, heads=ATT_HEADS, concat=True)
+        self.GCN2 = GATConv(input_size * ATT_HEADS, input_size, heads=int(ATT_HEADS/2), concat=True)
 
-        self.GCN1 = GATConv(input_size, input_size)
-        self.GCN2 = GATConv(input_size, input_size)
-
-        # After pooling, the input size is 500 (output of last GCN layer)
-        self.linear = torch.nn.Linear(input_size * GRAPH_SIZE, input_size * int(GRAPH_SIZE/2))
+        # After GCN layers, each graph is flattened to a vector of size input_size * GRAPH_SIZE * int(ATT_HEADS/2)
+        self.linear = torch.nn.Linear(input_size * GRAPH_SIZE * int(ATT_HEADS/2), input_size * int(GRAPH_SIZE/2))
         self.linear2 = torch.nn.Linear(input_size * int(GRAPH_SIZE/2), input_size)
         self.linear3 = torch.nn.Linear(input_size, output_size)
 

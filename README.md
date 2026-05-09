@@ -1,6 +1,8 @@
 # CrystalDefects
 
-A machine learning system for predicting crystal defect properties using Graph Convolutional Networks (GCNs) for QIS applications.
+A machine learning system for predicting crystal defect properties using Graph Convolutional Networks (GCNs) for QIS applications. 
+
+See the README.md in the tight_binding_model folder for TBM specific info
 
 ## Overview
 
